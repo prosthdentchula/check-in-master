@@ -329,10 +329,13 @@
       const res = await fetch(APPS_SCRIPT_URL + '?action=qr', { cache: 'no-store' });
       const data = await res.json();
       if (data && data.token) {
-        secondsRemaining = data.secondsRemaining;
         if (data.token !== currentToken) {
           currentToken = data.token;
+          secondsRemaining = data.secondsRemaining;
           updateQr(currentToken);
+        } else if (Math.abs(secondsRemaining - data.secondsRemaining) > 2) {
+          // Only resync if we drifted significantly
+          secondsRemaining = data.secondsRemaining;
         }
         pollFailures = 0;
         setStatus(true);
@@ -355,9 +358,13 @@
     tickClock();
   }, 1000);
 
-  setInterval(pollToken, 3000);
+  // Use a self-calling timeout to prevent overlapping requests
+  async function pollLoop() {
+    await pollToken();
+    setTimeout(pollLoop, 3000);
+  }
 
-  pollToken();
+  pollLoop();
   tickClock();
   renderRing();
 </script>
