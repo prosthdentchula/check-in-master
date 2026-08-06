@@ -334,7 +334,6 @@
           secondsRemaining = data.secondsRemaining;
           updateQr(currentToken);
         } else if (Math.abs(secondsRemaining - data.secondsRemaining) > 2) {
-          // Only resync if we drifted significantly
           secondsRemaining = data.secondsRemaining;
         }
         pollFailures = 0;
@@ -342,7 +341,7 @@
       }
     } catch (err) {
       pollFailures++;
-      if (pollFailures >= 2) setStatus(false);
+      if (pollFailures >= 3) setStatus(false);
     }
   }
 
@@ -358,10 +357,10 @@
     tickClock();
   }, 1000);
 
-  // Use a self-calling timeout to prevent overlapping requests
+  // Poll every 10 seconds instead of 3 to avoid Google's strict rate limits
   async function pollLoop() {
     await pollToken();
-    setTimeout(pollLoop, 3000);
+    setTimeout(pollLoop, 10000);
   }
 
   pollLoop();
