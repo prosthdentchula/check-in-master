@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0e1f1c;
+  --surface: #16302b;
+  --surface-2: #1e3a33;
+  --mint: #4fe3b0;
+  --coral: #f0785a;
+  --text: #f3f7f4;
+  --text-muted: #8ca69e;
+  --line: rgba(243, 247, 244, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  overflow: hidden;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3vh 4vw;
+  height: 100%;
+}
+
+.topbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.eyebrow {
+  font-size: clamp(14px, 1.6vw, 20px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.clock {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: clamp(16px, 1.8vw, 22px);
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3vh;
+}
+
+.headline {
+  text-align: center;
+  font-size: clamp(20px, 2.6vw, 32px);
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.headline span {
+  color: var(--mint);
+}
+
+.gauge-wrap {
+  position: relative;
+  width: min(46vh, 42vw);
+  height: min(46vh, 42vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge-wrap.expired svg circle.arc {
+  stroke: var(--coral) !important;
+}
+
+.qr-card {
+  position: relative;
+  width: 62%;
+  height: 62%;
+  background: #f3f7f4;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.qr-card.pulse {
+  animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.035); }
+  100% { transform: scale(1); }
+}
+
+svg.ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+circle.track {
+  fill: none;
+  stroke: var(--surface-2);
+  stroke-width: 4;
+}
+
+circle.arc {
+  fill: none;
+  stroke: var(--mint);
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+}
+
+.countdown-label {
+  position: absolute;
+  bottom: -6%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: clamp(13px, 1.3vw, 16px);
+  color: var(--text-muted);
+  background: var(--bg);
+  padding: 2px 12px;
+  border-radius: 20px;
+  box-shadow: 0 0 0 1px var(--line);
+  white-space: nowrap;
+}
+
+.countdown-label b {
+  color: var(--mint);
+  font-weight: 600;
+}
+
+.gauge-wrap.expired .countdown-label b {
+  color: var(--coral);
+}
+
+.instructions {
+  text-align: center;
+  max-width: 620px;
+}
+
+.instructions p {
+  margin: 0;
+  font-size: clamp(14px, 1.5vw, 18px);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.instructions strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mint);
+}
+
+.dot.offline {
+  background: var(--coral);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--surface-2);
+  border-top-color: var(--mint);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qr-card.pulse { animation: none; }
+  circle.arc { transition: none; }
+}
